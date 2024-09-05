@@ -6,7 +6,7 @@ speaker_pin = Pin(8, Pin.OUT)
 speaker_pwm = PWM(speaker_pin)
 speaker_pwm.freq(1000)
 
-notes = [440, 494, 523, 587] 
+notes = [440, 494, 523, 587]  # Frequencies for "a1", "b1", "c1", "d1" in Hz
 lose_note = 200
 
 button_pins = [
@@ -65,7 +65,7 @@ while True:
                            button_pins[3].value()]
 
         counter = 0
-        lose = False  
+        lose = False  # Initialize lose flag at the beginning of each sequence check
         while counter < length:
             for i in range(4):
                 if prev_btn_values[i] != button_pins[i].value():
@@ -75,8 +75,10 @@ while True:
                     time.sleep(0.25)
                     led_pins[i].value(0)
                     
+                    # Check if the pressed button matches the sequence
                     if led_seq[counter] != btn_seq[counter]:
                         lose = True
+                        length = 0
                         break
                     
                     counter += 1
@@ -84,6 +86,7 @@ while True:
                         break
 
             if lose:
+                length = 0
                 break
 
             prev_btn_values = [button_pins[0].value(),
